@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var alertVisible: Bool = false
+    @State private var sliderValue: Double = 50.0
+    @State private var game: Game = Game()
+    
     var body: some View {
         VStack {
             VStack {
@@ -18,22 +22,33 @@ struct ContentView: View {
                     .lineSpacing(4.0)
                     // Instead of hard coding a font size, use built-in dynamic sizing
                     .font(.footnote)
-                Text("89")
+                Text(String(game.target))
                     .kerning(1.0)
                     .font(.largeTitle)
                     .fontWeight(.black)
             }
             HStack {
                 Text("1")
-                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                // Default value to 50, in range 1 to 100
-                Slider(value: .constant(50), in: 1.0...100.0)
+                    .fontWeight(.bold)
+                // Default value binding to state variable, in range 1 to 100
+                // need $ convert a state variable to a binding
+                Slider(value: self.$sliderValue, in: 1.0...100.0)
                 Text("100")
-                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    .fontWeight(.bold)
             }
-            Button(action: {}) {
+            Button(action: {
+                self.alertVisible = true
+            }) {
                 Text("Hit Me")
             }
+            .alert(isPresented: $alertVisible, content: {
+                let roundedValue: Int = Int(self.sliderValue.rounded())
+                return Alert(
+                    title: Text("Hello there!"),
+                    message: Text("The slider's value is \(roundedValue).\n" + "You scored \(game.points(sliderValue: roundedValue)) points this round."),
+                    dismissButton: .default(Text("Awesome!"))
+                )
+            })
         }
     }
 }
