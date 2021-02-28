@@ -23,10 +23,14 @@ struct ContentView: View {
             BackgroundView(game: $game)
             VStack {
                 InstructionsView(game: $game)
-                SliderView(sliderValue: $sliderValue)
+                    // Add padding for the fact we moved SliderView outside of VStack
+                    .padding(.bottom, 100)
                 HitMeButton(alertVisible: $alertVisible, sliderValue: $sliderValue, game: $game)
             }
         }
+        // Slider isn't center if its inside the VStack
+        // When it was inside, it centers that view withint the VStack
+        SliderView(sliderValue: $sliderValue)
     }
 }
 
@@ -90,11 +94,13 @@ struct HitMeButton: View {
         )
         .alert(isPresented: $alertVisible, content: {
             let roundedValue = Int(sliderValue.rounded())
+            let points = game.calculatePoints(sliderValue: Int(sliderValue))
             return Alert(
                 title: Text("Hello there!"),
-                message: Text("The slider's value is \(roundedValue).\n" + "You scored \(game.points(sliderValue: roundedValue)) points this round."),
-                dismissButton: .default(Text("Awesome!"))
-            )
+                message: Text("The slider's value is \(roundedValue).\n" + "You scored \(points) points this round."),
+                dismissButton: .default(Text("Awesome!")) {
+                    game.startNewRound(points: points)
+                })
         })
     }
 }
