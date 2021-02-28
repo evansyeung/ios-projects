@@ -18,8 +18,9 @@ struct ContentView: View {
             // Hex #F3F8FD or rgb(243, 248, 253)
             // In order to use rgb you need to convert the by dividing by 255.0
             // Color(red: 243.0 / 255.0, green: 248.0 / 255.0, blue: 253.0 / 255.0)
-            Color("BackgroundColor")
-                .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+            // Color("BackgroundColor")
+            //    .edgesIgnoringSafeArea(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+            BackgroundView(game: $game)
             VStack {
                 InstructionsView(game: $game)
                 SliderView(sliderValue: $sliderValue)
@@ -81,6 +82,12 @@ struct HitMeButton: View {
         )
         .foregroundColor(Color.white)
         .cornerRadius(21.0)
+        // An overlay is a view that gets drawn on top of everything else
+        // An alternative to using a zstack
+        .overlay(
+            RoundedRectangle(cornerRadius: 21.0)
+                .strokeBorder(Color.white, lineWidth: 2.0)
+        )
         .alert(isPresented: $alertVisible, content: {
             let roundedValue = Int(sliderValue.rounded())
             return Alert(
