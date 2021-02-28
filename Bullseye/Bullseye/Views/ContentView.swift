@@ -24,13 +24,21 @@ struct ContentView: View {
             VStack {
                 InstructionsView(game: $game)
                     // Add padding for the fact we moved SliderView outside of VStack
-                    .padding(.bottom, 100)
-                HitMeButton(alertVisible: $alertVisible, sliderValue: $sliderValue, game: $game)
+                    .padding(.bottom, alertVisible ? 0 : 100)
+
+                // Conditional rendering of PointsView and HitMeButton vuiew
+                if alertVisible {
+                    PointsView(alertVisible: $alertVisible, sliderValue: $sliderValue, game: $game)
+                } else {
+                    HitMeButton(alertVisible: $alertVisible, sliderValue: $sliderValue, game: $game)
+                }
+            }
+            // Slider isn't center if its inside the VStack
+            // When it was inside, it centers that view withint the VStack
+            if !alertVisible {
+                SliderView(sliderValue: $sliderValue)
             }
         }
-        // Slider isn't center if its inside the VStack
-        // When it was inside, it centers that view withint the VStack
-        SliderView(sliderValue: $sliderValue)
     }
 }
 
@@ -92,16 +100,16 @@ struct HitMeButton: View {
             RoundedRectangle(cornerRadius: 21.0)
                 .strokeBorder(Color.white, lineWidth: 2.0)
         )
-        .alert(isPresented: $alertVisible, content: {
-            let roundedValue = Int(sliderValue.rounded())
-            let points = game.calculatePoints(sliderValue: Int(sliderValue))
-            return Alert(
-                title: Text("Hello there!"),
-                message: Text("The slider's value is \(roundedValue).\n" + "You scored \(points) points this round."),
-                dismissButton: .default(Text("Awesome!")) {
-                    game.startNewRound(points: points)
-                })
-        })
+        //        .alert(isPresented: $alertVisible, content: {
+        //            let roundedValue = Int(sliderValue.rounded())
+        //            let points = game.calculatePoints(sliderValue: Int(sliderValue))
+        //            return Alert(
+        //                title: Text("Hello there!"),
+        //                message: Text("The slider's value is \(roundedValue).\n" + "You scored \(points) points this round."),
+        //                dismissButton: .default(Text("Awesome!")) {
+        //                    game.startNewRound(points: points)
+        //                })
+        //        })
     }
 }
 
