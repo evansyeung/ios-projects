@@ -29,14 +29,17 @@ struct ContentView: View {
                 // Conditional rendering of PointsView and HitMeButton vuiew
                 if alertVisible {
                     PointsView(alertVisible: $alertVisible, sliderValue: $sliderValue, game: $game)
+                        .transition(.scale)
                 } else {
                     HitMeButton(alertVisible: $alertVisible, sliderValue: $sliderValue, game: $game)
+                        .transition(.scale)
                 }
             }
             // Slider isn't center if its inside the VStack
             // When it was inside, it centers that view withint the VStack
             if !alertVisible {
                 SliderView(sliderValue: $sliderValue)
+                    .transition(.scale)
             }
         }
     }
@@ -79,7 +82,9 @@ struct HitMeButton: View {
 
     var body: some View {
         Button(action: {
-            alertVisible = true
+            withAnimation {
+                alertVisible = true
+            }
         }) {
             Text("Hit Me".uppercased())
                 .bold()
