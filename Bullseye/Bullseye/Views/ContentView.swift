@@ -103,7 +103,7 @@ struct HitMeButton: View {
         // An alternative to using a zstack
         .overlay(
             RoundedRectangle(cornerRadius: 21.0)
-                .strokeBorder(Color.white, lineWidth: 2.0)
+                .strokeBorder(Color.white, lineWidth: Constants.General.strokeWidth)
         )
         //        .alert(isPresented: $alertVisible, content: {
         //            let roundedValue = Int(sliderValue.rounded())
