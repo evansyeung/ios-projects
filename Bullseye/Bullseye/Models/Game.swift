@@ -18,6 +18,17 @@ struct Game {
     var round = 1
     var leaderboardEntries: [LeaderboardEntry] = []
 
+    // Initializer for game instances that can load some test data
+    init(loadTestData: Bool = false) {
+        if loadTestData {
+            leaderboardEntries.append(LeaderboardEntry(score: 100, date: Date()))
+            leaderboardEntries.append(LeaderboardEntry(score: 80, date: Date()))
+            leaderboardEntries.append(LeaderboardEntry(score: 200, date: Date()))
+            leaderboardEntries.append(LeaderboardEntry(score: 50, date: Date()))
+            leaderboardEntries.append(LeaderboardEntry(score: 20, date: Date()))
+        }
+    }
+
     func calculatePoints(sliderValue: Int) -> Int {
         // If you have a method that only has a single line of code, you don't need to use the return keyword
         // 100 - abs(target - sliderValue)

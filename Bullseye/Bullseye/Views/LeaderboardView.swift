@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LeaderboardView: View {
     @Binding var leaderboardVisible: Bool
+    @Binding var game: Game
 
     var body: some View {
         ZStack {
@@ -17,7 +18,15 @@ struct LeaderboardView: View {
             VStack(spacing: 10) {
                 HeaderView(leaderboardVisible: $leaderboardVisible, text: "Leaderboard")
                 LabelView()
-                RowView(index: 1, score: 10, date: Date())
+                ScrollView {
+                    VStack(spacing: 10) {
+                        // game.leaderboardEntries.indices returns all of the indices in the array
+                        ForEach(game.leaderboardEntries.indices) { index in
+                            let leaderboardEntry = game.leaderboardEntries[index]
+                            RowView(index: index+1, score: leaderboardEntry.score, date: leaderboardEntry.date)
+                        }
+                    }
+                }
             }
         }
     }
@@ -68,6 +77,7 @@ struct HeaderView: View {
                         .padding(.leading)
                 }
             }
+            .padding(.top)
             HStack {
                 // We want the BigBoldText to be centered and everything in HStack to be right justified
                 Spacer()
@@ -105,16 +115,17 @@ struct LabelView: View {
 struct Leaderboard_Previews: PreviewProvider {
     // For binding variables we need to create this binding constant
     static private var leaderboaredVisible = Binding.constant(false)
+    static private var game = Binding.constant(Game(loadTestData: true))
 
     static var previews: some View {
-        LeaderboardView(leaderboardVisible: leaderboaredVisible)
+        LeaderboardView(leaderboardVisible: leaderboaredVisible, game: game)
         // Can add a second preview
-        LeaderboardView(leaderboardVisible: leaderboaredVisible)
+        LeaderboardView(leaderboardVisible: leaderboaredVisible, game: game)
             .previewLayout(.fixed(width: 568, height: 320))
-        LeaderboardView(leaderboardVisible: leaderboaredVisible)
+        LeaderboardView(leaderboardVisible: leaderboaredVisible, game: game)
             // Line adds dark mdoe
             .preferredColorScheme(.dark)
-        LeaderboardView(leaderboardVisible: leaderboaredVisible)
+        LeaderboardView(leaderboardVisible: leaderboaredVisible, game: game)
             .preferredColorScheme(.dark)
             .previewLayout(.fixed(width: 568, height: 320))
     }
