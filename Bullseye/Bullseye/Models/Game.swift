@@ -7,10 +7,16 @@
 
 import Foundation
 
+struct LeaderboardEntry {
+    let score: Int
+    let date: Date
+}
+
 struct Game {
     var target = Int.random(in: 1...100)
     var score = 0
     var round = 1
+    var leaderboardEntries: [LeaderboardEntry] = []
 
     func calculatePoints(sliderValue: Int) -> Int {
         // If you have a method that only has a single line of code, you don't need to use the return keyword
@@ -33,11 +39,17 @@ struct Game {
         target = Int.random(in: 1...100)
         score += points
         round += 1
+        addToLeaderboardEntry(points: points)
     }
 
     mutating func restart() {
         target = Int.random(in: 1...100)
         score = 0
         round = 1
+    }
+
+    mutating func addToLeaderboardEntry(points: Int) {
+        leaderboardEntries.append(LeaderboardEntry(score: points, date: Date()))
+        leaderboardEntries.sort { $0.score > $1.score}
     }
 }

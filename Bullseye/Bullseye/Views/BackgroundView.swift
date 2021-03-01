@@ -25,6 +25,7 @@ struct BackgroundView: View {
 
 struct TopView: View {
     @Binding var game: Game
+    @State private var leaderboardVisible = false
 
     var body: some View {
         HStack {
@@ -37,7 +38,13 @@ struct TopView: View {
             // Extends the space between these two views (as much as possible)
             // This in effect pushs the views to the left and the right
             Spacer()
-            RoundedImageViewFilled(systemName: "list.dash")
+            Button(action: {
+                leaderboardVisible = true
+            }) {
+                RoundedImageViewFilled(systemName: "list.dash")
+            }.sheet(isPresented: $leaderboardVisible, onDismiss: {}, content: {
+                LeaderboardView(leaderboardVisible: $leaderboardVisible)
+            })
         }
     }
 }
